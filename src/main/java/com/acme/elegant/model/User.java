@@ -16,19 +16,13 @@ public class User extends Audit{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, length = 200)
-    //@NotNull
-    //@NotBlank
+    @Column(unique = true, length = 200, nullable = false)
     private String email;
 
-    @Column(unique = true, length = 100)
-    @NotNull
-    @NotBlank
+    @Column(unique = true, length = 100, nullable = false)
     private String username;
 
-    @Column(length = 100)
-    @NotNull
-    @NotBlank
+    @Column(length = 100, nullable = false)
     private String password;
 
 }

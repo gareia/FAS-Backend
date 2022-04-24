@@ -11,17 +11,14 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class SaveUserResource {
 
-    @Column(unique = true, length = 200)
     @NotNull
     @NotBlank
     private String email;
 
-    @Column(unique = true, length = 100)
     @NotNull
     @NotBlank
     private String username;
 
-    @Column(length = 100)
     @NotNull
     @NotBlank
     private String password;

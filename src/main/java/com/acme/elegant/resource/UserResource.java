@@ -1,6 +1,5 @@
 package com.acme.elegant.resource;
 
-import com.acme.elegant.model.Audit;
 import lombok.Getter;
 import lombok.Setter;
 
