@@ -52,6 +52,7 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public Page<Post> getAllPosts(Pageable pageable) {
+
         return postRepository.findAll(pageable);
     }
 
@@ -62,18 +63,15 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public Page<Post> getSellablePosts(Pageable pageable) {
-        return null;
-    }
+    public Page<Post> getPostsBySellable(boolean sellable, Pageable pageable) {
 
-    @Override
-    public Page<Post> getNonSellablePosts(Pageable pageable) {
-        return null;
+        return postRepository.findBySellable(sellable, pageable);
     }
 
     @Override
     public Page<Post> getPostsByUserId(Long userId, Pageable pageable) {
-        return null;
+
+        return postRepository.findByUserId(userId, pageable);
     }
 
     @Override

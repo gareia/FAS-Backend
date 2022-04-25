@@ -19,11 +19,8 @@ public interface PostService {
     Post getPostById(Long postId);
 
 
-    //obtener solo los posts de tienda (sellable=true)
-    Page<Post> getSellablePosts(Pageable pageable);
-
-    //obtener solo los posts de galeria (sellable=false)
-    Page<Post> getNonSellablePosts(Pageable pageable);
+    //posts de tienda (sellable=true) posts de galeria (sellable=false)
+    Page<Post> getPostsBySellable(boolean sellable, Pageable pageable);
 
     //obtener solo los posts de 1 persona
     Page<Post> getPostsByUserId(Long userId, Pageable pageable);

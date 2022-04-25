@@ -42,7 +42,7 @@ public class PostController {
                 convertToEntity(resource)));
     }
 
-    @GetMapping("/posts")
+    @GetMapping("/feed")
     public Page<PostResource> getAllPosts(Pageable pageable) {
         Page<Post> posts = postService.getAllPosts(pageable);
         List<PostResource> resources = posts.getContent().stream()
@@ -66,13 +66,37 @@ public class PostController {
         return postService.deletePost(postId);
     }
 
-    @GetMapping("/users/{userLikedId}/posts")
-    public Page<PostResource> getPostsByUserLikedId(@PathVariable(name = "userLikedId") Long userLikedId,
+    @GetMapping("/users/{userId}/likes")
+    public Page<PostResource> getPostsByUserLikedId(@PathVariable(name = "userId") Long userId,
                                                   Pageable pageable) {
-        Page<Post> posts = postService.getPostsByUserLikedId(userLikedId, pageable);
+        Page<Post> posts = postService.getPostsByUserLikedId(userId, pageable);
         List<PostResource> resources = posts.getContent().stream()
                 .map(this::convertToResource).collect(Collectors.toList());
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
+    @GetMapping("/users/{userId}/posts")
+    public Page<PostResource> getPostsByUserId(@PathVariable(name = "userId") Long userId,
+                                               Pageable pageable) {
+        Page<Post> posts = postService.getPostsByUserId(userId, pageable);
+        List<PostResource> resources = posts.getContent().stream()
+                .map(this::convertToResource).collect(Collectors.toList());
+        return new PageImpl<>(resources, pageable, resources.size());
+    }
+
+    @GetMapping("/marketplace")
+    public Page<PostResource> getSellablePosts(Pageable pageable) {
+        Page<Post> posts = postService.getPostsBySellable(true, pageable);
+        List<PostResource> resources = posts.getContent().stream()
+                .map(this::convertToResource).collect(Collectors.toList());
+        return new PageImpl<>(resources, pageable, resources.size());
+    }
+
+    @GetMapping("/gallery")
+    public Page<PostResource> getNonSellablePosts(Pageable pageable) {
+        Page<Post> posts = postService.getPostsBySellable(false, pageable);
+        List<PostResource> resources = posts.getContent().stream()
+                .map(this::convertToResource).collect(Collectors.toList());
+        return new PageImpl<>(resources, pageable, resources.size());
+    }
 }
