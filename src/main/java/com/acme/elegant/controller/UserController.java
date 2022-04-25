@@ -66,5 +66,12 @@ public class UserController {
         return userService.deleteUser(userId);
     }
 
-
+    @GetMapping("/posts/{postLikedId}/users")
+    public Page<UserResource> getUsersByPostLikedId(@PathVariable(name="postLikedId") Long postLikedId,
+                                                    Pageable pageable){
+        Page<User> users = userService.getUsersByPostLikedId(postLikedId, pageable);
+        List<UserResource> resources = users.getContent().stream()
+                .map(this::convertToResource).collect(Collectors.toList());
+        return new PageImpl<>(resources, pageable, resources.size());
+    }
 }

@@ -6,9 +6,12 @@ import com.acme.elegant.repository.PostRepository;
 import com.acme.elegant.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PostServiceImpl implements PostService{
@@ -73,5 +76,12 @@ public class PostServiceImpl implements PostService{
         return null;
     }
 
+    @Override
+    public Page<Post> getPostsByUserLikedId(Long userLikedId, Pageable pageable) {
 
+        return userRepository.findById(userLikedId).map(user->{
+            List<Post> posts = user.getPostsLiked();
+            return new PageImpl<>(posts, pageable, posts.size());
+        }).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userLikedId));
+    }
 }

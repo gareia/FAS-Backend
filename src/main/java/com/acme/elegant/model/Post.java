@@ -9,6 +9,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Table(name="posts")
@@ -32,4 +33,15 @@ public class Post extends Audit{
     @OnDelete(action = OnDeleteAction.CASCADE)
     //@JsonIgnore
     private User user;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+        cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        })
+    @JoinTable(name="likes",
+            joinColumns = {@JoinColumn(name="post_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")})
+    @JsonIgnore
+    private List<User> usersLiked;
 }

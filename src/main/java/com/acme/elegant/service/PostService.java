@@ -28,4 +28,6 @@ public interface PostService {
     //obtener solo los posts de 1 persona
     Page<Post> getPostsByUserId(Long userId, Pageable pageable);
 
+    Page<Post> getPostsByUserLikedId(Long userLikedId, Pageable pageable);
+
 }

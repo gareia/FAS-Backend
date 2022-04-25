@@ -13,4 +13,5 @@ public interface UserService {
     User updateUser(Long userId, User userRequest);
     ResponseEntity<?> deleteUser(Long userId);
 
+    Page<User> getUsersByPostLikedId(Long postLikedId, Pageable pageable);
 }
