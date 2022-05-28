@@ -34,4 +34,24 @@ public class User extends Audit{
             }, mappedBy = "usersLiked")
     @JsonIgnore
     private List<Post> postsLiked;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name="followers",
+            joinColumns = {@JoinColumn(name="followed_id")},//referencedColumnName = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "follower_id")})//referencedColumnName = "user_id")})
+    @JsonIgnore
+    private List<User> followers;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }, mappedBy = "followers")
+    @JsonIgnore
+    private List<User> followed;
+
 }

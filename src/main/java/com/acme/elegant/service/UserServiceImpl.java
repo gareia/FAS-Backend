@@ -63,4 +63,36 @@ public class UserServiceImpl implements UserService{
             return new PageImpl<>(users, pageable, users.size());
         }).orElseThrow(()->new ResourceNotFoundException("Post", "Id", postLikedId));
     }
+
+    @Override
+    public User assignFollower(Long followerId, Long followedId) {
+
+        User follower = userRepository.findById(followerId)
+                .orElseThrow(()->new ResourceNotFoundException("UserFollower", "Id", followerId));
+
+        return userRepository.findById((followedId)).map(followed->{
+            if(!followed.getFollowers().contains(follower)){
+                followed.getFollowers().add(follower);
+                return userRepository.save(followed);
+            }
+            return followed;
+        }).orElseThrow(()->new ResourceNotFoundException("UserFollowed", "Id", followedId));
+
+    }
+
+    @Override
+    public Page<User> getFollowers(Long userId, Pageable pageable) {
+        return userRepository.findById(userId).map(user->{
+            List<User> users = user.getFollowers();
+            return new PageImpl<>(users, pageable, users.size());
+        }).orElseThrow(()->new ResourceNotFoundException("User", "Id", userId));
+    }
+
+    @Override
+    public Page<User> getFollowed(Long userId, Pageable pageable) {
+        return userRepository.findById(userId).map(user->{
+            List<User> users = user.getFollowed();
+            return new PageImpl<>(users, pageable, users.size());
+        }).orElseThrow(()->new ResourceNotFoundException("User", "Id", userId));
+    }
 }

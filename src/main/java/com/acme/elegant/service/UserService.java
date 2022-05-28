@@ -14,4 +14,8 @@ public interface UserService {
     ResponseEntity<?> deleteUser(Long userId);
 
     Page<User> getUsersByPostLikedId(Long postLikedId, Pageable pageable);
+
+    User assignFollower(Long followerId, Long followedId);
+    Page<User> getFollowers(Long userId, Pageable pageable);
+    Page<User> getFollowed(Long userId, Pageable pageable);
 }

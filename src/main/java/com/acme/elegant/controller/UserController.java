@@ -74,4 +74,29 @@ public class UserController {
                 .map(this::convertToResource).collect(Collectors.toList());
         return new PageImpl<>(resources, pageable, resources.size());
     }
+
+    @PostMapping("/users/{followerId}/follows/{followedId}")
+    public UserResource assignFollower(@PathVariable(name="followerId") Long followerId,
+                                       @PathVariable(name="followedId") Long followedId){
+
+        return convertToResource(userService.assignFollower(followerId, followedId));
+    }
+
+    @GetMapping("/users/{userId}/followers")
+    public Page<UserResource> getFollowers(@PathVariable(name="userId") Long userId,
+                                           Pageable pageable){
+        Page<User> users = userService.getFollowers(userId, pageable);
+        List<UserResource> resources = users.getContent().stream()
+                .map(this::convertToResource).collect(Collectors.toList());
+        return new PageImpl<>(resources, pageable, resources.size());
+    }
+
+    @GetMapping("/users/{userId}/followed")
+    public Page<UserResource> getFollowed(@PathVariable(name="userId") Long userId,
+                                           Pageable pageable){
+        Page<User> users = userService.getFollowed(userId, pageable);
+        List<UserResource> resources = users.getContent().stream()
+                .map(this::convertToResource).collect(Collectors.toList());
+        return new PageImpl<>(resources, pageable, resources.size());
+    }
 }
