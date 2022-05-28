@@ -44,4 +44,15 @@ public class Post extends Audit{
             inverseJoinColumns = {@JoinColumn(name = "user_id")})
     @JsonIgnore
     private List<User> usersLiked;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name="taggables",
+            joinColumns = {@JoinColumn(name="post_id")},
+            inverseJoinColumns = {@JoinColumn(name = "tag_id")})
+    @JsonIgnore
+    private List<Tag> tags;
 }

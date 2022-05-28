@@ -33,25 +33,25 @@ public class TagController {
     public Page<TagResource> getAllTags(Pageable pageable){
         Page<Tag> tags = tagService.getAllTags(pageable);
         List<TagResource> resources = tags.getContent().stream()
-                .map(this::converToResource).collect(Collectors.toList());
+                .map(this::convertToResource).collect(Collectors.toList());
         return new PageImpl<>(resources, pageable, resources.size());
     }
 
     @PostMapping("/tags")
     public TagResource createTag(@Valid @RequestBody SaveTagResource resource){
         Tag tag = convertToEntity(resource);
-        return converToResource(tagService.createTag(tag));
+        return convertToResource(tagService.createTag(tag));
     }
 
     @GetMapping("/tags/{tagId}")
     public TagResource getTagById(@PathVariable(name = "tagId")Long tagId){
-        return converToResource(tagService.getTagById(tagId));
+        return convertToResource(tagService.getTagById(tagId));
     }
 
     @PutMapping("/tags/{tagId}")
     public TagResource updateTag(@PathVariable(name ="tagId") Long tagId, @Valid @RequestBody SaveTagResource resource){
         Tag tag = convertToEntity(resource);
-        return converToResource(tagService.updateTag(tagId, tag));
+        return convertToResource(tagService.updateTag(tagId, tag));
     }
 
     @DeleteMapping("/tags/{tagId}")
@@ -59,6 +59,15 @@ public class TagController {
         return tagService.deleteTag(tagId);
     }
 
+    @GetMapping("/posts/{postId}/tags")
+    public Page<TagResource> getTagsByPostId(@PathVariable(name="postId") Long postId,
+                                             Pageable pageable){
+        Page<Tag> tags = tagService.getTagsByPostId(postId,pageable);
+        List<TagResource> resources = tags.getContent().stream()
+                .map(this::convertToResource).collect(Collectors.toList());
+        return new PageImpl<>(resources, pageable, resources.size());
+    }
+
     private Tag convertToEntity(SaveTagResource resource){ return mapper.map(resource, Tag.class);}
-    private TagResource converToResource(Tag entity){return mapper.map(entity,TagResource.class);}
+    private TagResource convertToResource(Tag entity){return mapper.map(entity,TagResource.class);}
 }

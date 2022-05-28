@@ -13,4 +13,6 @@ public interface TagService {
     Page<Tag> getAllTags(Pageable pageable);
     Tag updateTag(Long tagId, Tag tagRequest);
     ResponseEntity<?> deleteTag(Long tagId);
+
+    Page<Tag> getTagsByPostId(Long postId, Pageable pageable);
 }

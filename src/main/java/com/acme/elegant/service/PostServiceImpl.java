@@ -2,7 +2,10 @@ package com.acme.elegant.service;
 
 import com.acme.elegant.exception.ResourceNotFoundException;
 import com.acme.elegant.model.Post;
+import com.acme.elegant.model.Tag;
+import com.acme.elegant.model.User;
 import com.acme.elegant.repository.PostRepository;
+import com.acme.elegant.repository.TagRepository;
 import com.acme.elegant.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +24,9 @@ public class PostServiceImpl implements PostService{
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
 
     @Override
     public Post createPost(Long userId, Post post) {
@@ -75,6 +81,20 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
+    public Post assignLike(Long userId, Long postId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new ResourceNotFoundException("User","Id", userId));
+
+        return postRepository.findById(postId).map(post->{
+            if(!post.getUsersLiked().contains(user)){
+                post.getUsersLiked().add(user);
+                return postRepository.save(post);
+            }
+            return post;
+        }).orElseThrow(()->new ResourceNotFoundException("Post", "Id", postId));
+    }
+
+    @Override
     public Page<Post> getPostsByUserLikedId(Long userLikedId, Pageable pageable) {
 
         return userRepository.findById(userLikedId).map(user->{
@@ -82,4 +102,28 @@ public class PostServiceImpl implements PostService{
             return new PageImpl<>(posts, pageable, posts.size());
         }).orElseThrow(() -> new ResourceNotFoundException("User", "Id", userLikedId));
     }
+
+    @Override
+    public Post assignTag(Long postId, Long tagId) {
+        Tag tag = tagRepository.findById(tagId)
+                .orElseThrow(()->new ResourceNotFoundException("Tag","Id", tagId));
+
+        return postRepository.findById(postId).map(post->{
+            if(!post.getTags().contains(tag)){
+                post.getTags().add(tag);
+                return postRepository.save(post);
+            }
+            return post;
+        }).orElseThrow(()->new ResourceNotFoundException("Post", "Id", postId));
+    }
+
+    @Override
+    public Page<Post> getPostsByTagId(Long tagId, Pageable pageable) {
+        return tagRepository.findById(tagId).map(tag->{
+            List<Post> posts = tag.getPosts();
+            return new PageImpl<>(posts, pageable, posts.size());
+        }).orElseThrow(()-> new ResourceNotFoundException("Tag", "Id", tagId));
+    }
+
+
 }

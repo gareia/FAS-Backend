@@ -66,7 +66,7 @@ public class UserController {
         return userService.deleteUser(userId);
     }
 
-    @GetMapping("/posts/{postLikedId}/users")
+    @GetMapping("/posts/{postLikedId}/likes")
     public Page<UserResource> getUsersByPostLikedId(@PathVariable(name="postLikedId") Long postLikedId,
                                                     Pageable pageable){
         Page<User> users = userService.getUsersByPostLikedId(postLikedId, pageable);

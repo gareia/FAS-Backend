@@ -66,15 +66,6 @@ public class PostController {
         return postService.deletePost(postId);
     }
 
-    @GetMapping("/users/{userId}/likes")
-    public Page<PostResource> getPostsByUserLikedId(@PathVariable(name = "userId") Long userId,
-                                                  Pageable pageable) {
-        Page<Post> posts = postService.getPostsByUserLikedId(userId, pageable);
-        List<PostResource> resources = posts.getContent().stream()
-                .map(this::convertToResource).collect(Collectors.toList());
-        return new PageImpl<>(resources, pageable, resources.size());
-    }
-
     @GetMapping("/users/{userId}/posts")
     public Page<PostResource> getPostsByUserId(@PathVariable(name = "userId") Long userId,
                                                Pageable pageable) {
@@ -95,6 +86,36 @@ public class PostController {
     @GetMapping("/gallery")
     public Page<PostResource> getNonSellablePosts(Pageable pageable) {
         Page<Post> posts = postService.getPostsBySellable(false, pageable);
+        List<PostResource> resources = posts.getContent().stream()
+                .map(this::convertToResource).collect(Collectors.toList());
+        return new PageImpl<>(resources, pageable, resources.size());
+    }
+
+    @PostMapping("/users/{userId}/posts/{postId}")
+    public PostResource assignLike(@PathVariable(name="userId") Long userId,
+                                   @PathVariable(name="postId") Long postId){
+        return convertToResource(postService.assignLike(userId, postId));
+    }
+
+    @GetMapping("/users/{userId}/likes")
+    public Page<PostResource> getPostsByUserLikedId(@PathVariable(name = "userId") Long userId,
+                                                    Pageable pageable) {
+        Page<Post> posts = postService.getPostsByUserLikedId(userId, pageable);
+        List<PostResource> resources = posts.getContent().stream()
+                .map(this::convertToResource).collect(Collectors.toList());
+        return new PageImpl<>(resources, pageable, resources.size());
+    }
+
+    @PostMapping("/posts/{postId}/tags/{tagId}")
+    public PostResource assignTag(@PathVariable(name="postId") Long postId,
+                                  @PathVariable(name="tagId") Long tagId){
+        return convertToResource(postService.assignTag(postId, tagId));
+    }
+
+    @GetMapping("/tags/{tagId}/posts")
+    public Page<PostResource> getPostsByTagId(@PathVariable(name="tagId") Long tagId,
+                                              Pageable pageable){
+        Page<Post> posts = postService.getPostsByTagId(tagId, pageable);
         List<PostResource> resources = posts.getContent().stream()
                 .map(this::convertToResource).collect(Collectors.toList());
         return new PageImpl<>(resources, pageable, resources.size());
