@@ -13,26 +13,29 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class Profile extends Audit{
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+     private Long id;
 
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-         private long id;
     @NotNull
     @NotBlank
-         private String firstNames;
-    @NotNull
-    @NotBlank
-         private String lastNames;
-    @NotNull
-    @NotBlank
-         private int cellphone;
-    @NotNull
-    @NotBlank
-         private String address;
-    @NotNull
-    @NotBlank
-         private String size;
+    private String firstNames;
 
+    @NotNull
+    @NotBlank
+    private String lastNames;
 
+    @NotNull
+    @NotBlank
+    private int cellphone;
+
+    @NotNull
+    @NotBlank
+    private String address;
+
+    @NotNull
+    @NotBlank
+    private String size;
 
 }

@@ -76,7 +76,6 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public Page<Post> getPostsByUserId(Long userId, Pageable pageable) {
-
         return postRepository.findByUserId(userId, pageable);
     }
 

@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User getUsersById(Long userId) {
+    public User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(()->new ResourceNotFoundException("User", "Id", userId));
     }
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User updateUser(Long userId, User userRequest) {
-        User user = getUsersById(userId);
+        User user = getUserById(userId);
         user.setEmail(userRequest.getEmail());
         user.setUsername(userRequest.getUsername());
         user.setPassword(userRequest.getPassword());
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public ResponseEntity<?> deleteUser(Long userId) {
-        User user = getUsersById(userId);
+        User user = getUserById(userId);
         userRepository.delete(user);
         return ResponseEntity.ok().build();
     }

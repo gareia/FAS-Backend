@@ -55,4 +55,9 @@ public class Post extends Audit{
             inverseJoinColumns = {@JoinColumn(name = "tag_id")})
     @JsonIgnore
     private List<Tag> tags;
+
+    //1 univ tiene muchos periodos
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
+    private List<Image> images;
+
 }

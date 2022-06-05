@@ -52,7 +52,7 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     public UserResource getUserById(@PathVariable(name = "userId") Long userId) {
-        return convertToResource(userService.getUsersById(userId));
+        return convertToResource(userService.getUserById(userId));
     }
 
     @PutMapping("/users/{userId}")
